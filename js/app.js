@@ -1,14 +1,9 @@
 import { Quad } from "./quad"
-import { Matrix } from "./math/matrix"
 
 const canvas = document.querySelector("#glcanvas")
 
 export let runtime = 0
-export let camera = new Matrix().ortho2D(0, window.innerWidth, 0, window.innerHeight, -100, 100)
 export const gl = canvas.getContext("webgl2")
-
-
-export let numRenderedFrames = 0
 
 let quad = null
 
@@ -67,10 +62,6 @@ function main() {
 function update() {
     gl.bindFramebuffer(gl.FRAMEBUFFER, currentFramebuffer)
 
-    if (numRenderedFrames === 0) {
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-    }
-
     quad.render(previousTexture)
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null)
@@ -88,7 +79,6 @@ function update() {
     currentTexture = tmpTexture
 
     runtime++
-    numRenderedFrames++
     requestAnimationFrame(() => update(gl))
 }
 
@@ -104,8 +94,6 @@ function resize() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
     gl.viewport(0, 0, canvas.width, canvas.height)
-    camera = new Matrix().ortho2D(0, window.innerWidth, 0, window.innerHeight, -1, 1)
-    numRenderedFrames = 0
 }
 
 main()

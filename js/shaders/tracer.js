@@ -3,11 +3,8 @@ export const vertexShader2D =
 
 layout (location = 0) in vec2 aPos;
 
-uniform mat4 projection;
-uniform mat4 model;
-
 void main() {
-    gl_Position = projection * model * vec4(aPos, 0.0, 1.0);
+    gl_Position = vec4(aPos, 0.0, 1.0);
 }
 `
 
@@ -24,7 +21,6 @@ uniform vec2 resolution;
 uniform float time;
 
 uniform sampler2D MainTexOld;
-uniform float numRenderedFrames;
 
 out vec4 FragColor;
 
@@ -185,10 +181,10 @@ void main() {
 
     vec4 oldRender = texture(MainTexOld, uv);
     vec4 newRender = vec4(Trace(ray, rngState), 1.0);
-    float weight = 1.0 / (numRenderedFrames + 1.0);
+    float weight = 1.0 / (time + 1.0);
 
     vec4 accumulatedAverage = oldRender * (1.0 - weight) + newRender * weight;
 
-    FragColor = vec4(accumulatedAverage.xyz, 1.0);//vec4(RandomValue(rngState), RandomValue(rngState), RandomValue(rngState), 1.0);
+    FragColor = vec4(accumulatedAverage.xyz, 1.0);
 }
 `

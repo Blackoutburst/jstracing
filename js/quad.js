@@ -1,7 +1,6 @@
-import { camera, gl, numRenderedFrames, runtime, texture } from "./app"
+import { gl, runtime } from "./app"
 import { fragmentShader2D, vertexShader2D } from "./shaders/tracer"
 import { createShaderProgram, setUniform1f, setUniform1i, setUniform2f, setUniformMat4 } from "./shader"
-import { Matrix } from "./math/matrix"
 
 const vertices = [
     -1, -1,
@@ -45,9 +44,6 @@ export class Quad {
         gl.bindTexture(gl.TEXTURE_2D, previousTexture)
         setUniform1f(this.shaderProgram, "time", runtime)
         setUniform2f(this.shaderProgram, "resolution", window.innerWidth, window.innerHeight)
-        setUniformMat4(this.shaderProgram, "model", new Matrix().scale(window.innerWidth, window.innerHeight).values())
-        setUniformMat4(this.shaderProgram, "projection", camera.values())
-        setUniform1f(this.shaderProgram, 'numRenderedFrames', numRenderedFrames)
         setUniform1i(this.shaderProgram, 'MainTexOld', 0)
 
         gl.bindVertexArray(this.vaoId)
