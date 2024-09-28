@@ -13,7 +13,6 @@ export const fragmentShader2D =
 precision highp float;
 
 #define S32_MAX 2147483647.0
-#define RENDER_PASS 200
 #define BOUNCE_COUNT 20
 #define DIVERGENCE 5.0
 
