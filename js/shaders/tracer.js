@@ -13,8 +13,9 @@ export const fragmentShader2D =
 precision highp float;
 
 #define S32_MAX 2147483647.0
+#define RAY_COUNT 10
 #define BOUNCE_COUNT 20
-#define DIVERGENCE 5.0
+#define DIVERGENCE 1.0
 
 uniform vec2 resolution;
 uniform float time;
@@ -178,11 +179,18 @@ void main() {
 
     vec2 uv = gl_FragCoord.xy / resolution;
 
+    vec4 totalLight = vec4(0.0);
+
+    for (int i = 0; i < RAY_COUNT; i++) {
+        totalLight += vec4(Trace(ray, rngState), 1.0);
+    }
+
     vec4 oldRender = texture(MainTexOld, uv);
-    vec4 newRender = vec4(Trace(ray, rngState), 1.0);
+    vec4 newRender = totalLight / vec4(RAY_COUNT);
     float weight = 1.0 / (time + 1.0);
 
-    vec4 accumulatedAverage = oldRender * (1.0 - weight) + newRender * weight;
+
+    vec4 accumulatedAverage = mix(oldRender, newRender, weight);
 
     FragColor = vec4(accumulatedAverage.xyz, 1.0);
 }
